@@ -84,18 +84,20 @@
 
  $hours=intval(date("h"));
  $ampm=date('a');
-$premins="";
+
+ $premins="";
  $mins=intval(date('i'));
  if ( $mins == 0 ) $mins=" o'clock on the hour ";
  else if ( $mins < 10 ) $mins="oh $mins";
- else if ( $mins < 15 ) { $mins=""; $premins=$mins.' past'; }
+ else if ( $mins < 15 ) { $premins=$mins.' past'; $mins=0; }
  else if ( $mins == 15 ) { $mins=""; $premins="quarter past"; }
  else if ( $mins == 30 ) { $mins=""; $premins="half past"; }
  else if ( $mins == 45 ) { $mins="";
   $hours++; if ( $hours == 13 ) $hours=1; $ampm=($ampm=="am"?"pm":"am"); $premins="quarter to";
  }
- else if ( $mins >= 50 ) { $mins="";
+ else if ( $mins >= 50 ) {
   $hours++; if ( $hours == 13 ) $hours=1; $ampm=($ampm=="am"?"pm":"am"); $premins=(60-$mins)." minutes to";
+ $mins="";
  }
 
  if ( $mins == 0
@@ -176,16 +178,17 @@ $premins="";
 
  aloud($output);
 
- shell_exec( 'curl -s https://www.nasa.gov/rss/dyn/breaking_news.rss | grep "<title>" nasa.txt');
+ shell_exec( 'curl -s https://www.nasa.gov/rss/dyn/breaking_news.rss | grep "<title>" > nasa.txt');
 
  $nasa=explode("\n",file_get_contents("nasa.txt"));
 
+ var_dump($nasa);
  foreach ( $nasa as &$n ) {
   $p=explode("<title>",$n);
-  $n=str_replace("</title>",", ... ",$p[1]);
+  $n=str_replace("</title>",", ... ",str_replace(["<item>","<title>"],["",""],$n));
  }
 
- $keys=array_rand($nasa,1);
+ $keys=array_rand($nasa,3);
 
  $output="Recent headlines from NASA., ".implode(", ... ",array_by_keys($nasa,$keys));
 
