@@ -3,14 +3,18 @@ A talking clock using espeak, wttr.in, curl, SimpleXML and php.  Written for spe
 
 ## Installation
 
+Move files to /home/pi
+
 ```
 sudo apt install php curl php-xml
 chown pi:pi /var/www/html
 mkdir /var/www/html/messaging
 chmod a+rwx /var/www/html/messaging
+chmod 0777 /home/pi/kill_it.sh
+chmod 0777 /home/pi/play_it.sh
 ```
 
-Place folder "html" in /var/www/html
+Place contents of folder "html" in /var/www/html
 
 ```
 crontab -e
