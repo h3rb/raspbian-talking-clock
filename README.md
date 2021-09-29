@@ -3,8 +3,13 @@ A talking clock using espeak, wttr.in, curl, SimpleXML and php.  Written for spe
 
 ## Installation
 
-Move files to /home/pi
+1. Setup an audio output (ie speakerphat, or use a speaker with a bigger raspi, etc)
 
+2. Setup your PiZeroW to have Wifi, or another network interface to internet.
+
+3. Move files to /home/pi
+
+4. Execute these lines to install a webserver and setup the scripts provided in this repo:
 ```
 sudo apt install php php-xml
 chown pi:pi /var/www/html
@@ -14,8 +19,11 @@ chmod 0777 /home/pi/kill_it.sh
 chmod 0777 /home/pi/play_it.sh
 ```
 
-Place contents of folder "html" in /var/www/html
+5. Place contents of folder "html" in /var/www/html
 
+6. Install these crontab entries:
+
+Using:
 ```
 crontab -e
 ```
