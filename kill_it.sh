@@ -14,5 +14,8 @@ if test -f "$FILE"; then
 fi
 
 sleep 4
+i=$[$i+1]
 
 done
+
+sudo pkill -9 -f kill_it.sh
