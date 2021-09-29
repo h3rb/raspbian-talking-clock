@@ -9,7 +9,8 @@ do
 
 if test -f "$FILE"; then
    rm $FILE
-   php -f /home/pi/run.php
+   sudo php -f /home/pi/run.php
+   # Sudo is required to read fortunes files.
 fi
 
 sleep 4
