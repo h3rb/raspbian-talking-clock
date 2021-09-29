@@ -43,3 +43,7 @@ Crontab entries:
 * * * * * sudo /home/pi/kill_it.sh
 * * * * * sudo /home/pi/play_it.sh
 ```
+
+## Documentation
+
+Visit the web interface by going to your raspi in a web browser.  You should see some buttons.  Press them.
