@@ -15,10 +15,11 @@
   return $a;
  }
 
+ // For some reason when you trigger this from the web it doesn't work.
  function fortune() {
-  shell_exec( "fortune > for.txt");
-  $res= file_get_contents("for.txt");
-  unlink("for.txt");
+  shell_exec( "bash -c `fortune > /var/www/html/messaging/for.txt`");
+  $res= file_get_contents("/var/www/html/messaging/for.txt");
+//  unlink("/var/www/html/messaging/for.txt");
   if ( strpos($res,"Q:") !== FALSE ) $res.=' , Ha ha ha, ha. ';
   $res=str_replace("#"," number ",$res);
   return str_replace("Q:","Question: ",str_replace("A:","answer: ",$res));
@@ -63,13 +64,13 @@
   return $strength.$prex.str_replace("mph", " miles per hour", $w);
  }
 
- $output = shell_exec( "curl \"wttr.in?format=%C|%h|%t|%f|%w|%l|%m|%M|%p|%P|%D|%S|%z|%s|%d|%T|%Z|\" -o test.txt" );
+ $output = shell_exec( "curl \"wttr.in?format=%C|%h|%t|%f|%w|%l|%m|%M|%p|%P|%D|%S|%z|%s|%d|%T|%Z|\" -o /var/www/html/messaging/test.txt" );
 
- $output = file_get_contents("test.txt");
+ $output = file_get_contents("/var/www/html/messaging/test.txt");
 
  echo $output;
 
- unlink("test.txt");
+ unlink("/var/www/html/messaging/test.txt");
 
  $parts = explode("|",$output);
 
@@ -160,7 +161,7 @@
  $output.=
   ', wind '.simple_wind($parts[4])
  .', humidity '.$parts[1]
- . (intval(str_replace("mm",'',$parts[8]))!=0?', '.str_replace("mm"," millimeters per 3 hours of precipitation ",$parts[8]):' no recent precipita$
+ . (intval(str_replace("mm",'',$parts[8]))!=0?', '.str_replace("mm"," millimeters per 3 hours of precipitation ",$parts[8]):' no recent precipitation')
  .', pressure '.str_replace("hPa","",$parts[9]).' hectopascals, '
  .', local dawn '.simple_time($parts[10])
  .', sunrise '.simple_time($parts[11])
@@ -170,7 +171,8 @@
  .', moon is '.$waxwane.' @ '.$percfull.' full'
  ;
  }
-  $output.=', at '.$parts[5]
+
+ $output.=', at '.$parts[5]
 // .' time zone '.$parts[15]
  ;
 
@@ -178,7 +180,7 @@
 
  aloud($output);
 
- shell_exec( 'curl -s https://www.nasa.gov/rss/dyn/breaking_news.rss | grep "<title>" > nasa.txt');
+ shell_exec( 'curl -s https://www.nasa.gov/rss/dyn/breaking_news.rss | grep "<title>" > /var/www/html/messaging/nasa.txt');
 
  $nasa=explode("\n",file_get_contents("nasa.txt"));
 
@@ -192,15 +194,15 @@
 
  $output="Recent headlines from NASA., ".implode(", ... ",array_by_keys($nasa,$keys));
 
- unlink("nasa.txt");
+ unlink("/var/www/html/messaging/nasa.txt");
 
  aloud($output);
 
 
  shell_exec( 'curl -s http://feeds.bbci.co.uk/news/rss.xml | grep "<title>" | '
-  .'sed "s/            <title><\!\[CDATA\[//g;s/\]\]><\/title>//;" | grep -v "BBC News" > BBC.txt');
+  .'sed "s/            <title><\!\[CDATA\[//g;s/\]\]><\/title>//;" | grep -v "BBC News" > /var/www/html/messaging/BBC.txt');
 
- $bbc=explode("\n",file_get_contents("BBC.txt"));
+ $bbc=explode("\n",file_get_contents("/var/www/html/messaging/BBC.txt"));
 
 
  $keys=array_rand($bbc,3);
@@ -209,4 +211,4 @@
 
  aloud($output);
 
- unlink("BBC.txt");
+ unlink("/var/www/html/messaging/BBC.txt");
