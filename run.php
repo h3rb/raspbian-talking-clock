@@ -94,10 +94,10 @@
  else if ( $mins == 15 ) { $mins=""; $premins="quarter past"; }
  else if ( $mins == 30 ) { $mins=""; $premins="half past"; }
  else if ( $mins == 45 ) { $mins="";
-  $hours++; if ( $hours == 13 ) $hours=1; $ampm=($ampm=="am"?"pm":"am"); $premins="quarter to";
+  $hours++; if ( $hours == 13 ) {$hours=1; $ampm=($ampm=="am"?"pm":"am");} $premins="quarter to";
  }
  else if ( $mins >= 50 ) {
-  $hours++; if ( $hours == 13 ) $hours=1; $ampm=($ampm=="am"?"pm":"am"); $premins=(60-$mins)." minutes to";
+  $hours++; if ( $hours == 13 ) {$hours=1; $ampm=($ampm=="am"?"pm":"am");} $premins=(60-$mins)." minutes to";
  $mins="";
  }
 
