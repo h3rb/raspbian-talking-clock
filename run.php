@@ -6,6 +6,7 @@
  $fort = new Fortune();
  $quote= $fort->QuoteFromDir("/usr/share/games/fortunes"); // Where fortune-mod installs its fortunes.
 
+ global $BRIEF_MODE;
  $BRIEF_MODE=false;
 
  if ( isset($argv[1]) ) $BRIEF_MODE = TRUE;
@@ -23,6 +24,8 @@
 
  // For some reason when you trigger this from the web it doesn't work.
  function fortune() {
+  global $BRIEF_MODE;
+  if ($BRIEF_MODE) return "";
 //  shell_exec( "bash -c 'fortune' 2>&1 /var/www/html/messaging/for.txt");
 //  $res= file_get_contents("/var/www/html/messaging/for.txt");
 //  unlink("/var/www/html/messaging/for.txt");
@@ -155,8 +158,8 @@
 
  $output =
  $greeting
- .fortune()
  .', It is '.$realtime
+ .fortune()
  .', Weather, report, '
  .'As of '.simple_time($parts[15]).', '
  .$parts[0].' '
