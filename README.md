@@ -11,7 +11,7 @@ A talking clock using espeak, wttr.in, curl, SimpleXML and php.  Written for spe
 
 4. Execute these lines to install a webserver and setup the scripts provided in this repo:
 ```
-sudo apt install -y php php-xml fortune
+sudo apt install -y php php-xml fortune-mod
 chown pi:pi /var/www/html
 mkdir /var/www/html/messaging
 chmod a+rwx /var/www/html/messaging
