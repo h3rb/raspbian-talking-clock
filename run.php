@@ -1,5 +1,11 @@
 <?php
 
+ include '/home/pi/fortune.php';
+
+ global $fort, $quote;
+ $fort = new Fortune();
+ $quote= $fort->QuoteFromDir("/usr/share/games/fortunes"); // Where fortune-mod installs its fortunes.
+
  $BRIEF_MODE=false;
 
  if ( isset($argv[1]) ) $BRIEF_MODE = TRUE;
@@ -17,9 +23,11 @@
 
  // For some reason when you trigger this from the web it doesn't work.
  function fortune() {
-  shell_exec( "bash -c `fortune > /var/www/html/messaging/for.txt`");
-  $res= file_get_contents("/var/www/html/messaging/for.txt");
+//  shell_exec( "bash -c 'fortune' 2>&1 /var/www/html/messaging/for.txt");
+//  $res= file_get_contents("/var/www/html/messaging/for.txt");
 //  unlink("/var/www/html/messaging/for.txt");
+  global $quote;
+  $res = $quote;
   if ( strpos($res,"Q:") !== FALSE ) $res.=' , Ha ha ha, ha. ';
   $res=str_replace("#"," number ",$res);
   return str_replace("Q:","Question: ",str_replace("A:","answer: ",$res));
