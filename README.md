@@ -6,7 +6,7 @@ A talking clock using espeak, wttr.in, curl, SimpleXML and php.  Written for spe
 Move files to /home/pi
 
 ```
-sudo apt install php curl php-xml
+sudo apt install php php-xml
 chown pi:pi /var/www/html
 mkdir /var/www/html/messaging
 chmod a+rwx /var/www/html/messaging
