@@ -137,7 +137,7 @@
  $realtime=$premins.' '.$hours.' '.$mins.' '.$ampm;
 
  $greeting="Allo mate. ";
- switch ( $hour ) {
+ switch ( $hours ) {
   case 0:
   case 1:
   case 2:
