@@ -1,15 +1,16 @@
 <?php
 
- include '/home/pi/fortune.php';
+ include 'fortune.php';
 
  global $fort, $quote;
  $fort = new Fortune();
- $quote= $fort->QuoteFromDir("/usr/share/games/fortunes"); // Where fortune-mod installs its fortunes.
+ $quote= @$fort->QuoteFromDir("/usr/share/games/fortunes");
 
  global $BRIEF_MODE;
  $BRIEF_MODE=false;
 
- if ( isset($argv[1]) ) $BRIEF_MODE = TRUE;
+ if ( isset($argv[1]) && stripos($argv[1],"brief")===0 ) $BRIEF_MODE = TRUE;
+ echo 'BRIEF MODE'.PHP_EOL;
 
  function aloud( $output, $speed=120 ) {
   echo $output;
@@ -25,7 +26,7 @@
  // For some reason when you trigger this from the web it doesn't work.
  function fortune() {
   global $BRIEF_MODE;
-  if ($BRIEF_MODE) return "";
+  if ( $BRIEF_MODE ) return "";
 //  shell_exec( "bash -c 'fortune' 2>&1 /var/www/html/messaging/for.txt");
 //  $res= file_get_contents("/var/www/html/messaging/for.txt");
 //  unlink("/var/www/html/messaging/for.txt");
@@ -48,6 +49,8 @@
   else if ( intval($parts[0]) == 0 ) { $parts[0]=12; $ampm="am"; }
   else $ampm="am";
   $minutes = intval($parts[1]);
+  if ( $minutes == 0 ) $minutes="";
+  else
   if ( $minutes < 10 ) $minutes="oh ".$minutes;
   return intval($parts[0]).' '.$minutes.' '.$ampm;
  }
@@ -68,6 +71,7 @@
    default: $prex="";
   }
   $strength=intval(str_replace("mph","",$w));
+  if ( $strength == 0 ) return "none";
   if ( $strength < 15 ) $strength="calm ";
   else if ( $strength >= 25 && $strength < 40 ) $strength="strong ";
   else if ( $strength >= 40 ) $strength="dangerous ";
@@ -97,8 +101,13 @@
  $hours=intval(date("h"));
  $ampm=date('a');
 
- $premins="";
  $mins=intval(date('i'));
+
+ if ( $hours < 8 && $ampm == "am" ) $BRIEF_MODE=TRUE;
+
+ if ( $hours < 7 && $mins != 0 ) $BRIEF_MODE=TRUE;
+
+ $premins="";
  if ( $mins == 0 ) $mins=" o'clock on the hour ";
  else if ( $mins < 10 ) $mins="oh $mins";
  else if ( $mins < 15 ) { $premins=$mins.' past'; $mins=0; }
@@ -159,10 +168,13 @@
  $output =
  $greeting
  .', It is '.$realtime
- .fortune()
- .', Weather, report, '
- .'As of '.simple_time($parts[15]).', '
- .$parts[0].' '
+ .fortune();
+
+ if ( $BRIEF_MODE == false ) {
+ $output .=', Weather, report, '
+          .'As of '.simple_time($parts[15]).', ';
+ }
+ $output.=$parts[0].' '
  .(strpos($parts[3],$parts[2])===0
    ?simple_temp($parts[2])
    :str_replace("F","",simple_temp($parts[2])).' feels like '.str_replace("F","",simple_temp($parts[3])))
@@ -181,15 +193,17 @@
  .', dusk is at '.simple_time($parts[14])
  .', moon is '.$waxwane.' @ '.$percfull.' full'
  ;
- }
-
  $output.=', at '.$parts[5]
 // .' time zone '.$parts[15]
  ;
+}
+
+ aloud($output);
+
+ if ( $BRIEF_MODE ) die;
 
  echo PHP_EOL;
 
- aloud($output);
 
  shell_exec( 'curl -s https://www.nasa.gov/rss/dyn/breaking_news.rss | grep "<title>" > /var/www/html/messaging/nasa.txt');
 
