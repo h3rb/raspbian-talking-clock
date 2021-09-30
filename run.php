@@ -137,7 +137,7 @@
  $realtime=$premins.' '.$hours.' '.$mins.' '.$ampm;
 
  $greeting="Allo mate. ";
- switch ( $hours ) {
+ switch ( intval(date('H')) ) {
   case 0:
   case 1:
   case 2:
