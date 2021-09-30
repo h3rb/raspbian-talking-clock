@@ -1,6 +1,8 @@
 # raspbian-talking-clock
 A talking clock using espeak, wttr.in, curl, SimpleXML and php.  Written for speaker-phat but doesn't require one.
 
+Speaks periodically, includes a weather report, latest headlines (BBC, NASA) at the top of the hour.
+
 ## Installation
 
 1. Setup an audio output (ie speakerphat, or use a speaker with a bigger raspi, etc)
