@@ -9,7 +9,7 @@ do
 
 if test -f "$FILE"; then
    rm $FILE
-   sudo pkill -9 -f "php -f run.php"
+   sudo pkill -9 -f run.php
    sudo pkill -9 -f espeak
 fi
 
