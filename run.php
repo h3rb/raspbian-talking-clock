@@ -204,15 +204,16 @@
 
  echo PHP_EOL;
 
-
  shell_exec( 'curl -s https://www.nasa.gov/rss/dyn/breaking_news.rss | grep "<title>" > /var/www/html/messaging/nasa.txt');
 
  $nasa=explode("\n",file_get_contents("/var/www/html/messaging/nasa.txt"));
 
+ unset($nasa[0]);
  var_dump($nasa);
+
  foreach ( $nasa as &$n ) {
   $p=explode("<title>",$n);
-  $n=str_replace("</title>",", ... ",str_replace(["<item>","<title>"],["",""],$n));
+  $n=strip_tags(str_replace("</title>",", ... ",str_replace(["<item>","<title>"],["",""],$n)));
  }
 
  $keys=array_rand($nasa,3);
